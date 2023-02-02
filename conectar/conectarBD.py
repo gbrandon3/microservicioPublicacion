@@ -1,14 +1,20 @@
-from modelos.modelos import db
-import os
 
+import os
+from modelos.modelos import db  
 class ConectarBD:
-    def conectar(self, app):
+    def conectar(self,app):
         ISPRUEBAS = os.environ.get('ISPRUEBAS', None)
         
         if ISPRUEBAS is None:
             app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///nombrebd.db'
             app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
             app.config['PROPAGATE_EXCEPTIONS'] = True
+            app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
+            app_context = app.app_context()
+            app_context.push()
+            print("Aqui")
+            db.init_app(app)
+            db.create_all()
         else:
             ISLOCAL = os.environ.get('ISLOCAL', None)
 
